@@ -1,0 +1,10 @@
+site_name: pytest-snowflake_bdd
+site_description: Setup test data and run tests on snowflake in BDD style!
+site_author: Tilak Patidar
+
+theme: readthedocs
+
+repo_url: https://github.com/tilakpatidar/pytest-snowflake_bdd
+
+pages:
+- Home: index.rst
