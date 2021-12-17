@@ -24,7 +24,7 @@ setup(
     description='Setup test data and run tests on snowflake in BDD style!',
     long_description=read('README.rst'),
     py_modules=['pytest_snowflake_bdd'],
-    python_requires='>=3.6.7,<=3.9',
+    python_requires='>=3.6.7',
     install_requires=['pytest>=6.2.0', 'pytest-bdd>=3.2.1', 'snowflake-sqlalchemy>=1.3.2', 'SQLAlchemy>=1.4.27', \
                       'pandas>=0.25.3'],
     tests_require=[
