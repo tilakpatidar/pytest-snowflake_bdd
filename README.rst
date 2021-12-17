@@ -113,6 +113,7 @@ Available Step definitions
 Use ``<null>``
 
 .. code:: gherkin
+
       | people_id: INTEGER | name: STRING | dept_id: INTEGER | dept_name: STRING  |
       | 10                 | "tilak"      | 1                | <null> |
 
