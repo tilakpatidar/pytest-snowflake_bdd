@@ -113,6 +113,47 @@ Use ``<null>``
       | people_id: INTEGER | name: STRING | dept_id: INTEGER | dept_name: STRING  |
       | 10                 | "tilak"      | 1                | <null> |
 
+
+Understanding data-type mismatch errors
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For assertion of tables we are using pandas. Differences are shown
+in-terms of pandas dataframe.
+
+Below snowflake to pandas type table can help in understanding the
+errors:
+
+================== ===============
+Snowflake datatype Pandas datatype
+================== ===============
+BIGINT             int64
+BINARY             bytes
+BOOLEAN            bool
+CHAR               str
+CHARACTER          str
+DATE               object
+DATETIME           object
+DEC                object
+DECIMAL            object
+DOUBLE             float64
+FIXED              object
+FLOAT              float64
+INT                int64
+INTEGER            int64
+NUMBER             object
+REAL               float64
+BYTEINT            int64
+SMALLINT           int64
+STRING             str
+TEXT               str
+TIME               object
+TIMESTAMP          object
+TINYINT            int64
+VARBINARY          bytes
+VARCHAR            str
+================== ===============
+
+
 Contributing
 ------------
 Contributions are very welcome. Tests can be run with `tox`_, please ensure
