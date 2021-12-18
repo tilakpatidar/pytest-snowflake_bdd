@@ -8,10 +8,6 @@ pytest-snowflake_bdd
     :target: https://pypi.org/project/pytest-snowflake_bdd
     :alt: Python versions
 
-.. image:: https://ci.appveyor.com/api/projects/status/github/tilakpatidar/pytest-snowflake_bdd?branch=master
-    :target: https://ci.appveyor.com/project/tilakpatidar/pytest-snowflake_bdd/branch/master
-    :alt: See Build Status on AppVeyor
-
 Setup test data and run tests on snowflake in BDD style!
 
 --------------------
@@ -28,7 +24,7 @@ Installation
 
 You can install "pytest-snowflake_bdd" via `pip`_ from `PyPI`_::
 
-    $ pip install pytest-snowflake_bdd
+    $ pip install pytest-snowflake-bdd
 
 
 Usage
