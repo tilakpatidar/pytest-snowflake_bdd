@@ -22,7 +22,7 @@ Provides `pytest-bdd`_ step definitions for testing snow-sql scripts against a s
 Installation
 ------------
 
-You can install "pytest-snowflake_bdd" via `pip`_ from `PyPI`_::
+You can install "pytest-snowflake_bdd" via `pip`_.
 
     $ pip install pytest-snowflake-bdd
 
@@ -137,5 +137,4 @@ If you encounter any problems, please `file an issue`_ along with a detailed des
 .. _`pytest`: https://github.com/pytest-dev/pytest
 .. _`tox`: https://tox.readthedocs.io/en/latest/
 .. _`pip`: https://pypi.org/project/pip/
-.. _`PyPI`: https://pypi.org/project
 .. _`pytest-bdd`: https://pypi.org/project/pytest-bdd/
