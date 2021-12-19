@@ -31,6 +31,20 @@ Usage
 -----
 
 This plugin relies on `pytest-bdd`_ to run bdd tests.
+
+You can pass your snowflake account details using the cli arguments to pytest command.
+
+.. code:: shell
+
+    custom options:
+      --snowflake_user=SNOWFLAKE_USER
+                            snowflake user for test environment
+      --snowflake_password=SNOWFLAKE_PASSWORD
+                            snowflake password for test environment
+      --snowflake_account=SNOWFLAKE_ACCOUNT
+                            snowflake password for test environment
+
+
 Below example illustrates the usage of step definitions provided by the plugin.
 
 .. code:: gherkin
