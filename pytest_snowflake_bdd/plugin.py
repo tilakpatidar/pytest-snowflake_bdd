@@ -17,6 +17,12 @@ def pytest_addoption(parser):
                      help='snowflake password for test environment')
     parser.addoption('--snowflake_account', required=True, action='store',
                      help='snowflake password for test environment')
+    parser.addoption('--snowflake_role', required=False, action='store',
+                     help='optional snowflake role for test environment',
+                     default=None)
+    parser.addoption('--snowflake_warehouse', required=False, action='store',
+                     help='optional snowflake warehouse for test environment',
+                     default=None)
 
 
 @pytest.fixture
@@ -34,12 +40,37 @@ def snowflake_account(request):
     return request.config.getoption('--snowflake_account')
 
 
+@pytest.fixture
+def snowflake_role(request):
+    return request.config.getoption('--snowflake_role')
+
+
+@pytest.fixture
+def snowflake_warehouse(request):
+    return request.config.getoption('--snowflake_warehouse')
+
+
 @pytest.fixture(scope="function")
-def snowflake_sqlalchemy_conn(snowflake_user, snowflake_password, snowflake_account):
+def snowflake_sqlalchemy_conn(snowflake_user, snowflake_password, snowflake_account,
+                              snowflake_role, snowflake_warehouse):
+
+    yield from _snowflake_sqlalchemy_conn(snowflake_user, snowflake_password, snowflake_account, snowflake_role,
+                                          snowflake_warehouse)
+
+
+def _snowflake_sqlalchemy_conn(snowflake_user, snowflake_password, snowflake_account, snowflake_role,
+                               snowflake_warehouse):
+    optional_params = {}
+    if snowflake_role:
+        optional_params["role"] = snowflake_role
+    if snowflake_warehouse:
+        optional_params["warehouse"] = snowflake_warehouse
+
     engine = create_engine(URL(
         account=snowflake_account,
         user=snowflake_user,
         password=snowflake_password,
+        **optional_params
     ))
     connection = engine.connect()
     yield engine

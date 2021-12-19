@@ -11,16 +11,45 @@ from sqlalchemy import INTEGER, VARCHAR, BOOLEAN
 
 def test_snowflake_cred_fixtures(testdir):
     testdir.makepyfile("""
-        def test_sth(snowflake_user, snowflake_password, snowflake_account):
+        def test_sth(snowflake_user, snowflake_password, snowflake_account, snowflake_role, snowflake_warehouse):
             assert snowflake_user == "user"
             assert snowflake_password == "password"
             assert snowflake_account == "account"
+            assert snowflake_role is None
+            assert snowflake_warehouse is None
     """)
 
     result = testdir.runpytest(
         '--snowflake_user=user',
         '--snowflake_password=password',
         '--snowflake_account=account',
+    )
+
+    # fnmatch_lines does an assertion internally
+    result.stdout.fnmatch_lines([
+        '*1 passed*',
+    ])
+
+    # make sure that that we get a '0' exit code for the testsuite
+    assert result.ret == 0
+
+
+def test_snowflake_cred_fixtures_optional(testdir):
+    testdir.makepyfile("""
+        def test_sth(snowflake_user, snowflake_password, snowflake_account, snowflake_role, snowflake_warehouse):
+            assert snowflake_user == "user"
+            assert snowflake_password == "password"
+            assert snowflake_account == "account"
+            assert snowflake_role == "role"
+            assert snowflake_warehouse == "warehouse"
+    """)
+
+    result = testdir.runpytest(
+        '--snowflake_user=user',
+        '--snowflake_password=password',
+        '--snowflake_account=account',
+        '--snowflake_role=role',
+        '--snowflake_warehouse=warehouse',
     )
 
     # fnmatch_lines does an assertion internally
@@ -209,3 +238,17 @@ def test_assert_table_contains(tmpdir):
             """
 
         assert_table_contains(snowflake_sqlalchemy_conn, tmp_file, table)
+
+
+def test_snowflake_sqlalchemy_conn():
+    from pytest_snowflake_bdd.plugin import _snowflake_sqlalchemy_conn
+    with mock.patch('pytest_snowflake_bdd.plugin.create_engine', return_value=mock.MagicMock()) as create_engine_mock:
+        next(_snowflake_sqlalchemy_conn("user", "password", "account", None, None))
+        create_engine_mock.assert_called_with('snowflake://user:password@account/')
+
+
+def test_snowflake_sqlalchemy_conn_with_optional_params():
+    from pytest_snowflake_bdd.plugin import _snowflake_sqlalchemy_conn
+    with mock.patch('pytest_snowflake_bdd.plugin.create_engine', return_value=mock.MagicMock()) as create_engine_mock:
+        next(_snowflake_sqlalchemy_conn("user", "password", "account", "role", "warehouse"))
+        create_engine_mock.assert_called_with('snowflake://user:password@account/?role=role&warehouse=warehouse')

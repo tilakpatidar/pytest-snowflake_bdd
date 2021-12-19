@@ -43,6 +43,10 @@ You can pass your snowflake account details using the cli arguments to pytest co
                             snowflake password for test environment
       --snowflake_account=SNOWFLAKE_ACCOUNT
                             snowflake password for test environment
+      --snowflake_role=SNOWFLAKE_ROLE
+                            optional snowflake role for test environment
+      --snowflake_warehouse=SNOWFLAKE_WAREHOUSE
+                            optional snowflake warehouse for test environment
 
 
 Below example illustrates the usage of step definitions provided by the plugin.
