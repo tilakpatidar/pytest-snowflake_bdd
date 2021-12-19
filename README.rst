@@ -37,15 +37,15 @@ You can pass your snowflake account details using the cli arguments to pytest co
 .. code:: shell
 
     custom options:
-      --snowflake_user=SNOWFLAKE_USER
+      --snowflake-user=SNOWFLAKE_USER
                             snowflake user for test environment
-      --snowflake_password=SNOWFLAKE_PASSWORD
+      --snowflake-password=SNOWFLAKE_PASSWORD
                             snowflake password for test environment
-      --snowflake_account=SNOWFLAKE_ACCOUNT
+      --snowflake-account=SNOWFLAKE_ACCOUNT
                             snowflake password for test environment
-      --snowflake_role=SNOWFLAKE_ROLE
+      --snowflake-role=SNOWFLAKE_ROLE
                             optional snowflake role for test environment
-      --snowflake_warehouse=SNOWFLAKE_WAREHOUSE
+      --snowflake-warehouse=SNOWFLAKE_WAREHOUSE
                             optional snowflake warehouse for test environment
 
 

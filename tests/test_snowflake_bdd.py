@@ -20,9 +20,9 @@ def test_snowflake_cred_fixtures(testdir):
     """)
 
     result = testdir.runpytest(
-        '--snowflake_user=user',
-        '--snowflake_password=password',
-        '--snowflake_account=account',
+        '--snowflake-user=user',
+        '--snowflake-password=password',
+        '--snowflake-account=account',
     )
 
     # fnmatch_lines does an assertion internally
@@ -45,11 +45,11 @@ def test_snowflake_cred_fixtures_optional(testdir):
     """)
 
     result = testdir.runpytest(
-        '--snowflake_user=user',
-        '--snowflake_password=password',
-        '--snowflake_account=account',
-        '--snowflake_role=role',
-        '--snowflake_warehouse=warehouse',
+        '--snowflake-user=user',
+        '--snowflake-password=password',
+        '--snowflake-account=account',
+        '--snowflake-role=role',
+        '--snowflake-warehouse=warehouse',
     )
 
     # fnmatch_lines does an assertion internally

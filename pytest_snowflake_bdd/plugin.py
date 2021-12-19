@@ -11,43 +11,43 @@ from .utils import table_to_df, assert_frame_equal_with_sort
 
 
 def pytest_addoption(parser):
-    parser.addoption('--snowflake_user', required=True,
+    parser.addoption('--snowflake-user', required=True,
                      action='store', help='snowflake user for test environment')
-    parser.addoption('--snowflake_password', required=True, action='store',
+    parser.addoption('--snowflake-password', required=True, action='store',
                      help='snowflake password for test environment')
-    parser.addoption('--snowflake_account', required=True, action='store',
+    parser.addoption('--snowflake-account', required=True, action='store',
                      help='snowflake password for test environment')
-    parser.addoption('--snowflake_role', required=False, action='store',
+    parser.addoption('--snowflake-role', required=False, action='store',
                      help='optional snowflake role for test environment',
                      default=None)
-    parser.addoption('--snowflake_warehouse', required=False, action='store',
+    parser.addoption('--snowflake-warehouse', required=False, action='store',
                      help='optional snowflake warehouse for test environment',
                      default=None)
 
 
 @pytest.fixture
 def snowflake_user(request):
-    return request.config.getoption('--snowflake_user')
+    return request.config.getoption('--snowflake-user')
 
 
 @pytest.fixture
 def snowflake_password(request):
-    return request.config.getoption('--snowflake_password')
+    return request.config.getoption('--snowflake-password')
 
 
 @pytest.fixture
 def snowflake_account(request):
-    return request.config.getoption('--snowflake_account')
+    return request.config.getoption('--snowflake-account')
 
 
 @pytest.fixture
 def snowflake_role(request):
-    return request.config.getoption('--snowflake_role')
+    return request.config.getoption('--snowflake-role')
 
 
 @pytest.fixture
 def snowflake_warehouse(request):
-    return request.config.getoption('--snowflake_warehouse')
+    return request.config.getoption('--snowflake-warehouse')
 
 
 @pytest.fixture(scope="function")
