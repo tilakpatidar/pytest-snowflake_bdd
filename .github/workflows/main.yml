@@ -44,7 +44,7 @@ jobs:
 
       - name: TESTPYPI Build a binary wheel and a source tarball
         run: |
-          GITHUB_RUN_NUMBER=${{ github.run_number }} python -m build --sdist --wheel --outdir dist/
+          BUILD_NUMBER=${{ github.run_number }} python -m build --sdist --wheel --outdir dist/
       - name: TESTPYPI Publish distribution
         uses: pypa/gh-action-pypi-publish@master
         with:

@@ -12,7 +12,7 @@ def read(fname):
     return codecs.open(file_path, encoding='utf-8').read()
 
 
-gh_run_number = os.environ.get("GITHUB_RUN_NUMBER", None)
+gh_run_number = os.environ.get("BUILD_NUMBER", None)
 build_number = None if gh_run_number is None or gh_run_number == "" else gh_run_number
 
 version = '0.1.1'
