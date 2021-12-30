@@ -53,7 +53,6 @@ def snowflake_warehouse(request):
 @pytest.fixture(scope="function")
 def snowflake_sqlalchemy_conn(snowflake_user, snowflake_password, snowflake_account,
                               snowflake_role, snowflake_warehouse):
-
     yield from _snowflake_sqlalchemy_conn(snowflake_user, snowflake_password, snowflake_account, snowflake_role,
                                           snowflake_warehouse)
 
@@ -91,8 +90,7 @@ def table_create_fixture(snowflake_sqlalchemy_conn, table_name, table):
 
 
 def create_table_with_data(snowflake_sqlalchemy_conn, table, table_name, temporary):
-
-    df, col_name_dtype_pairs, col_name_sqltype_pairs = table_to_df(table)
+    df, col_name_sqltype_pairs = table_to_df(table)
 
     assert len(table_name.split(".")) == 3, "Table name should be fully qualified ex: db_name.schema_name.table_name"
 
@@ -128,7 +126,7 @@ def assert_table_contains(snowflake_sqlalchemy_conn, script_path, table):
     print(sql)
 
     actual_df = pd.read_sql(sql, snowflake_sqlalchemy_conn)
-    expected_df, _, _ = table_to_df(table)
+    expected_df, _ = table_to_df(table)
 
     print("\n\n\nEXPECTED schema")
     print(expected_df.dtypes)
