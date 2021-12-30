@@ -78,13 +78,13 @@ def _snowflake_sqlalchemy_conn(snowflake_user, snowflake_password, snowflake_acc
     engine.dispose()
 
 
-@when(parsers.re(r'a temporary table called "(?P<table_name>.+)" has\s+(?P<table>[\s\S]+)'))
+@when(parsers.re('a temporary table called "(?P<table_name>.+)" has\s+(?P<table>[\s\S]+)'))
 def temp_table_create_fixture(snowflake_sqlalchemy_conn, table_name, table):
     create_table_with_data(snowflake_sqlalchemy_conn, table,
                            table_name, temporary=True)
 
 
-@when(parsers.re(r'a table called "(?P<table_name>.+)" has\s+(?P<table>[\s\S]+)'))
+@when(parsers.re('a table called "(?P<table_name>.+)" has\s+(?P<table>[\s\S]+)'))
 def table_create_fixture(snowflake_sqlalchemy_conn, table_name, table):
     create_table_with_data(snowflake_sqlalchemy_conn, table,
                            table_name, temporary=False)
@@ -121,7 +121,7 @@ def create_table_with_data(snowflake_sqlalchemy_conn, table, table_name, tempora
               index=False)
 
 
-@then(parsers.re(r'a sql script "(?P<script_path>.+)" runs and the result is\n(?P<table>[\s\S]+)'))
+@then(parsers.re('a sql script "(?P<script_path>.+)" runs and the result is\n(?P<table>[\s\S]+)'))
 def assert_table_contains(snowflake_sqlalchemy_conn, script_path, table):
     sql = open(script_path, "r").read()
     print("Executing query")
