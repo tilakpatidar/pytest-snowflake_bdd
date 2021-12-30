@@ -63,7 +63,7 @@ def test_snowflake_cred_fixtures_optional(testdir):
 
 def test_process_cells():
     from pytest_snowflake_bdd import utils
-    assert list(utils.process_cells(["name", "12", "<null>", "   <null>"])) == ["name", "12", None,
+    assert list(utils.process_cells(["name", "12", "{null}", "   {null}"])) == ["name", "12", None,
                                                                                 None]
 
 
@@ -95,8 +95,8 @@ def test_table_to_df():
 
     table = """| id: INTEGER | name: STRING   | active:BOOLEAN   |
                | 1           | "tilak"        | 1                |
-               | 2           | "t"            | <null>           |
-               | 3           | ""             | <null>           |
+               | 2           | "t"            | {null}           |
+               | 3           | ""             | {null}           |
     """
     actual_df, col_name_dtype_pairs, col_name_sqltype_pairs = utils.table_to_df(
         table)
@@ -120,8 +120,8 @@ def test_create_table_with_data_without_fq_table_name():
 
     table = """| id: INTEGER | name: STRING   | active:BOOLEAN   |
                    | 1           | "tilak"        | 1                |
-                   | 2           | "t"            | <null>           |
-                   | 3           | ""             | <null>           |
+                   | 2           | "t"            | {null}           |
+                   | 3           | ""             | {null}           |
         """
     with pytest.raises(Exception) as execinfo:
         create_table_with_data(snowflake_sqlalchemy_conn, table, "my_schema.my_table", temporary=True)
@@ -140,8 +140,8 @@ def test_create_table_with_data():
 
                 table = """| id: INTEGER | name: STRING   | active:BOOLEAN   |
                                | 1           | "tilak"        | 1                |
-                               | 2           | "t"            | <null>           |
-                               | 3           | ""             | <null>           |
+                               | 2           | "t"            | {null}           |
+                               | 3           | ""             | {null}           |
                     """
 
                 create_table_with_data(snowflake_sqlalchemy_conn, table, "my_db.my_schema.my_table", temporary=True)
@@ -168,8 +168,8 @@ def test_temp_table_create_fixture():
 
                 table = """| id: INTEGER | name: STRING   | active:BOOLEAN   |
                                | 1           | "tilak"        | 1                |
-                               | 2           | "t"            | <null>           |
-                               | 3           | ""             | <null>           |
+                               | 2           | "t"            | {null}           |
+                               | 3           | ""             | {null}           |
                     """
 
                 temp_table_create_fixture(snowflake_sqlalchemy_conn, "my_db.my_schema.my_table", table)
@@ -198,8 +198,8 @@ def test_table_create_fixture():
 
                 table = """| id: INTEGER | name: STRING   | active:BOOLEAN   |
                                | 1           | "tilak"        | 1                |
-                               | 2           | "t"            | <null>           |
-                               | 3           | ""             | <null>           |
+                               | 2           | "t"            | {null}           |
+                               | 3           | ""             | {null}           |
                     """
                 table_create_fixture(snowflake_sqlalchemy_conn, "my_db.my_schema.my_table", table)
 
@@ -233,8 +233,8 @@ def test_assert_table_contains(tmpdir):
 
         table = """| id: INTEGER | name: STRING   | active:BOOLEAN   |
                        | 1           | "tilak"        | 1                |
-                       | 2           | "t"            | <null>           |
-                       | 3           | ""             | <null>           |
+                       | 2           | "t"            | {null}           |
+                       | 3           | ""             | {null}           |
             """
 
         assert_table_contains(snowflake_sqlalchemy_conn, tmp_file, table)

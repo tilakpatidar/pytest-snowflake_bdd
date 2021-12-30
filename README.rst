@@ -124,12 +124,12 @@ Available Step definitions
 
 **Representing null in table data**
 
-Use ``<null>``
+Use ``{null}``
 
 .. code:: gherkin
 
       | people_id: INTEGER | name: STRING | dept_id: INTEGER | dept_name: STRING  |
-      | 10                 | "tilak"      | 1                | <null> |
+      | 10                 | "tilak"      | 1                | {null} |
 
 
 Understanding data-type mismatch errors

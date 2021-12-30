@@ -17,7 +17,7 @@ def process_cells(cells):
         cell = cell.strip()
         if cell[0] == '"' and cell[-1] == '"':
             yield cell[1:-1]
-        elif cell == "<null>":
+        elif cell == "{null}":
             yield None
         else:
             yield cell
