@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 from unittest import mock
 from unittest.mock import Mock, ANY
 
@@ -230,7 +231,7 @@ def test_assert_table_contains(tmpdir):
                        | 3           | ""             | {null}           |
             """
 
-        assert_table_contains(snowflake_sqlalchemy_conn, tmp_file, table)
+        assert_table_contains(snowflake_sqlalchemy_conn, tmp_file, table, None, None)
 
 
 def test_snowflake_sqlalchemy_conn():
@@ -245,3 +246,40 @@ def test_snowflake_sqlalchemy_conn_with_optional_params():
     with mock.patch('pytest_snowflake_bdd.plugin.create_engine', return_value=mock.MagicMock()) as create_engine_mock:
         next(_snowflake_sqlalchemy_conn("user", "password", "account", "role", "warehouse"))
         create_engine_mock.assert_called_with('snowflake://user:password@account/?role=role&warehouse=warehouse')
+
+
+def test_stub_sql_functions():
+    def _remove_extra_spaces(s):
+        return re.sub(r"\s+", " ", s)
+
+    from pytest_snowflake_bdd import utils
+    sql = """
+    select   current_timestamp()   a, 
+    CURRENT_TIMESTAMP() b, 
+    current_timestamp(   ) c, 
+    CURRENT_TIMESTAMP(   ) d,
+    localtimestamp() f,
+    getdate() g,
+    systimestamp() h,
+    sysdate() i,
+    current_time() j,
+    localtime() k
+    """
+
+    actual_sql = utils.stub_sql_functions(sql, current_timestamp="2022-01-05 04:12:17", current_time="04:12:17")
+
+    assert _remove_extra_spaces(actual_sql) == _remove_extra_spaces("""
+        select   CAST ('2022-01-05 04:12:17' AS TIMESTAMP)   a,
+    CAST ('2022-01-05 04:12:17' AS TIMESTAMP) b,
+    CAST ('2022-01-05 04:12:17' AS TIMESTAMP) c,
+    CAST ('2022-01-05 04:12:17' AS TIMESTAMP) d,
+    CAST ('2022-01-05 04:12:17' AS TIMESTAMP) f,
+    CAST ('2022-01-05 04:12:17' AS TIMESTAMP) g,
+    CAST ('2022-01-05 04:12:17' AS TIMESTAMP) h,
+    CAST ('2022-01-05 04:12:17' AS TIMESTAMP) i,
+    CAST ('04:12:17' AS TIME) j,
+    CAST ('04:12:17' AS TIME) k
+    """)
+
+
+    assert utils.stub_sql_functions("select 1", current_timestamp=None, current_time=None) == "select 1"

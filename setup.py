@@ -15,7 +15,7 @@ def read(fname):
 gh_run_number = os.environ.get("BUILD_NUMBER", None)
 build_number = None if gh_run_number is None or gh_run_number == "" else gh_run_number
 
-version = '0.1.3'
+version = '0.2.0'
 
 setup(
     name='pytest-snowflake_bdd',
@@ -31,7 +31,7 @@ setup(
     py_modules=['pytest_snowflake_bdd'],
     python_requires='>=3.6.7',
     install_requires=['pytest>=6.2.0', 'pytest-bdd>=3.2.1', 'snowflake-sqlalchemy>=1.3.2', 'SQLAlchemy>=1.4.27', \
-                      'pandas>=0.25.3'],
+                      'pandas>=0.25.3', 'python-dateutil>=2.8.2'],
     tests_require=[
       'tox',
     ],

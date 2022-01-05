@@ -7,7 +7,7 @@ from pytest_bdd import then, when, parsers, given
 from snowflake.sqlalchemy import URL
 from sqlalchemy import create_engine, Column, MetaData, Table
 
-from .utils import table_to_df, assert_frame_equal_with_sort
+from .utils import table_to_df, assert_frame_equal_with_sort, stub_sql_functions
 
 
 def pytest_addoption(parser):
@@ -55,6 +55,26 @@ def snowflake_sqlalchemy_conn(snowflake_user, snowflake_password, snowflake_acco
                               snowflake_role, snowflake_warehouse):
     yield from _snowflake_sqlalchemy_conn(snowflake_user, snowflake_password, snowflake_account, snowflake_role,
                                           snowflake_warehouse)
+
+
+@pytest.fixture(scope="function")
+def current_timestamp():
+    return None
+
+
+@pytest.fixture(scope="function")
+def current_time():
+    return None
+
+
+@given(parsers.re('current timestamp "(?P<now>.+)"'), target_fixture="current_timestamp")
+def current_timestamp_parser(now):
+    return now
+
+
+@given(parsers.re('current time "(?P<now>.+)"'), target_fixture="current_time")
+def current_time_parser(now):
+    return now
 
 
 def _snowflake_sqlalchemy_conn(snowflake_user, snowflake_password, snowflake_account, snowflake_role,
@@ -120,9 +140,10 @@ def create_table_with_data(snowflake_sqlalchemy_conn, table, table_name, tempora
 
 
 @then(parsers.re('a sql script "(?P<script_path>.+)" runs and the result is\n(?P<table>[\s\S]+)'))
-def assert_table_contains(snowflake_sqlalchemy_conn, script_path, table):
-    sql = open(script_path, "r").read()
+def assert_table_contains(snowflake_sqlalchemy_conn, script_path, table, current_timestamp, current_time):
+    sql = stub_sql_functions(open(script_path, "r").read(), current_timestamp, current_time)
     print("Executing query")
+
     print(sql)
 
     actual_df = _fetch_results(snowflake_sqlalchemy_conn, sql)

@@ -132,6 +132,35 @@ Use ``{null}``
       | 10                 | "tilak"      | 1                | {null} |
 
 
+**Stubbing current time related functions**
+
+Supports stubbing the following functions with the fixture value.
+
+current_timestamp, localtimestamp, getdate, systimestamp, sysdate, current_time, localtime
+
+These functions will be replaced in the sql query by statements like
+``CAST ('2022-01-05 04:12:17' as TIMESTAMP)`` or ``CAST ('04:12:17' as TIME)``
+
+.. code:: gherkin
+
+   Feature: ExampleFeature for snowflake testing
+
+     Scenario: example_scenario
+       Given a snowflake connection
+       And current timestamp "2022-01-05 04:12:17"
+       And current time "04:12:17"
+       When a temporary called "SNOWFLAKE_LIQUIBASE.PUBLIC.DEPARTMENT" has
+         | dept_id: INTEGER | dept_name: STRING      |
+         | 1                | "Computer Science"     |
+         | 2                | "Software Engineering" |
+       When a temporary called "SNOWFLAKE_LIQUIBASE.PUBLIC.PEOPLE" has
+         | people_id: INTEGER | name: STRING | dept_id: INTEGER |
+         | 10                 | "tilak"      | 1                |
+       Then a sql script "./sql/example.sql" runs and the result is
+         | people_id: INTEGER | name: STRING | dept_id: INTEGER | dept_name: STRING  |
+         | 10                 | "tilak"      | 1                | "Computer Science" |
+
+
 Understanding data-type mismatch errors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

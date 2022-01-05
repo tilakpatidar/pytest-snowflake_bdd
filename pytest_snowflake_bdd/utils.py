@@ -1,3 +1,7 @@
+import re
+from datetime import datetime
+
+import dateutil.parser
 import numpy
 import pandas as pd
 from pandas._testing import assert_frame_equal
@@ -23,7 +27,12 @@ def process_cells(col_name_sqltype_pairs, cells):
         else:
             value = cell
         if value is not None:
-            value = value.lower() == "true" if sql_type.python_type is bool else sql_type.python_type(value)
+            if sql_type.python_type is bool:
+                value = value.lower() == "true"
+            if sql_type.python_type is datetime:
+                value = dateutil.parser.parse(value)
+            else:
+                value = sql_type.python_type(value)
         yield value
 
 
@@ -59,3 +68,13 @@ def assert_frame_equal_with_sort(results, expected, key_columns, dtype_check=Tru
         by=key_columns).reset_index(drop=True).sort_index(axis=1)
     assert_frame_equal(results_sorted, expected_sorted,
                        check_index_type=False, check_dtype=False)
+
+
+def stub_sql_functions(sql, current_timestamp, current_time):
+    if current_timestamp is not None:
+        sql = re.sub(r"(current_timestamp|localtimestamp|getdate|systimestamp|sysdate)\s*\(\s*\)",
+                     f"CAST ('{current_timestamp}' AS TIMESTAMP)", sql, flags=re.IGNORECASE)
+    if current_time is not None:
+        sql = re.sub(r"(current_time|localtime)\s*\(\s*\)",
+                     f"CAST ('{current_time}' AS TIME)", sql, flags=re.IGNORECASE)
+    return sql
