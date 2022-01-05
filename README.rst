@@ -161,6 +161,19 @@ These functions will be replaced in the sql query by statements like
          | 10                 | "tilak"      | 1                | "Computer Science" |
 
 
+**Representing different data types in table**
+
+.. code:: gherkin
+
+   | a: CHAR | b: CHARACTER | c: STRING | d: TEXT | e: BINARY | f: VARBINARY |
+   | sample  | sample       | sample    | sample  | sample    | sample       |
+
+   | a: FLOAT | b: DOUBLE | c: INT | d: INTEGER | e: BIGINT | f: SMALLINT | g: TINYINT | h: BYTEINT |
+   | 1.0      | 1.0       | 1      | 1          | 1         | 1           | 1          | 1          |
+
+   | a: DATE    | b: DATETIME         | c: TIME  | d: TIMESTAMP        |
+   | 2021-05-05 | 2021-05-05 01:35:00 | 01:35:00 | 2021-05-05 01:35:00 |
+
 Understanding data-type mismatch errors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

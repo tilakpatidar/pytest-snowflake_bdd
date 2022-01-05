@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
+import datetime
 import re
 from unittest import mock
 from unittest.mock import Mock, ANY
 
 import pandas
 import pytest
-from sqlalchemy import INTEGER, VARCHAR, BOOLEAN
+from snowflake.sqlalchemy import DOUBLE
+from sqlalchemy import INTEGER, VARCHAR, BOOLEAN, CHAR, BINARY, FLOAT, BIGINT, SMALLINT, DATE, DATETIME, TIME, TIMESTAMP
 
 
 def test_snowflake_cred_fixtures(testdir):
@@ -281,5 +283,69 @@ def test_stub_sql_functions():
     CAST ('04:12:17' AS TIME) k
     """)
 
-
     assert utils.stub_sql_functions("select 1", current_timestamp=None, current_time=None) == "select 1"
+
+
+def test_table_to_df_string_types():
+    from pytest_snowflake_bdd import utils
+    table = """| a: CHAR | b: CHARACTER | c: STRING | d: TEXT | e: BINARY | f: VARBINARY |
+               | t       | t            | t         | t       | t         | t            |
+    """
+    actual_df, col_name_sqltype_pairs = utils.table_to_df(
+        table)
+
+    expected_col_name_to_sqltype_pairs = str(
+        [("a", CHAR()), ("b", CHAR()), ("c", VARCHAR()), ("d", VARCHAR()), ("e", BINARY()), ("f", BINARY()) ])
+
+    expected_df = pandas.DataFrame([["t", "t", "t", "t", b"t", b"t"]], columns=["a", "b", "c", "d", "e", "f"])
+
+    pandas.testing.assert_frame_equal(actual_df, expected_df)
+
+    assert str(col_name_sqltype_pairs) == expected_col_name_to_sqltype_pairs
+
+
+def test_table_to_df_numeric_types():
+    from pytest_snowflake_bdd import utils
+    table = """| a: FLOAT | b: DOUBLE | c: INT | d: INTEGER | e: BIGINT | f: SMALLINT | g: TINYINT | h: BYTEINT |
+               | 1.0      | 1.0       | 1      | 1          | 1         | 1           | 1          | 1          |
+    """
+    actual_df, col_name_sqltype_pairs = utils.table_to_df(
+        table)
+
+    expected_col_name_to_sqltype_pairs = str(
+        [("a", FLOAT()), ("b", DOUBLE()), ("c", INTEGER()), ("d", INTEGER()), ("e", BIGINT()), ("f", SMALLINT()),
+         ("g", SMALLINT()), ("h", SMALLINT())])
+
+    expected_df = pandas.DataFrame([[1.0, 1.0, 1, 1, 1, 1, 1, 1]], columns=["a", "b", "c", "d", "e", "f", "g", "h"])
+
+    pandas.testing.assert_frame_equal(actual_df, expected_df)
+
+    assert str(col_name_sqltype_pairs) == expected_col_name_to_sqltype_pairs
+
+
+def test_table_to_df_datetime_types():
+    from pytest_snowflake_bdd import utils
+    table = """| a: DATE    | b: DATETIME         | c: TIME  | d: TIMESTAMP        |
+               | 2021-05-05 | 2021-05-05 01:35:00 | 01:35:00 | 2021-05-05 01:35:00 |
+    """
+    actual_df, col_name_sqltype_pairs = utils.table_to_df(
+        table)
+
+    expected_col_name_to_sqltype_pairs = str(
+        [("a", DATE()), ("b", DATETIME()), ("c", TIME()), ("d", TIMESTAMP())])
+
+    expected_df = pandas.DataFrame([[datetime.date(2021, 5, 5), datetime.datetime(2021, 5, 5, 1, 35, 0),
+                                     datetime.time(1, 35, 0), datetime.datetime(2021, 5, 5, 1, 35, 0)]],
+                                   columns=["a", "b", "c", "d"]).astype(
+        {
+            "a": "datetime64",
+            "b": "datetime64",
+            "c": "object",
+            "d": "datetime64",
+        }
+    )
+
+    pandas.testing.assert_frame_equal(actual_df, expected_df)
+
+    assert str(col_name_sqltype_pairs) == expected_col_name_to_sqltype_pairs
+

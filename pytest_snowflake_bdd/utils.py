@@ -1,5 +1,5 @@
 import re
-from datetime import datetime
+from datetime import datetime, date, time
 
 import dateutil.parser
 import numpy
@@ -29,8 +29,12 @@ def process_cells(col_name_sqltype_pairs, cells):
         if value is not None:
             if sql_type.python_type is bool:
                 value = value.lower() == "true"
-            if sql_type.python_type is datetime:
-                value = dateutil.parser.parse(value)
+            elif sql_type.python_type in (datetime, date):
+                value = dateutil.parser.isoparse(value)
+            elif sql_type.python_type is time:
+                value = time.fromisoformat(value)
+            elif sql_type.python_type is bytes:
+                value = sql_type.python_type(value, "utf-8")
             else:
                 value = sql_type.python_type(value)
         yield value
