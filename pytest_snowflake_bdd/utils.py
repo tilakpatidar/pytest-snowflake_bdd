@@ -32,7 +32,7 @@ def process_cells(col_name_sqltype_pairs, cells):
             elif sql_type.python_type in (datetime, date):
                 value = dateutil.parser.isoparse(value)
             elif sql_type.python_type is time:
-                value = time.fromisoformat(value)
+                value = time(*list(map(lambda x: int(x), str(value).split(":"))))
             elif sql_type.python_type is bytes:
                 value = sql_type.python_type(value, "utf-8")
             else:
