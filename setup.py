@@ -15,7 +15,7 @@ def read(fname):
 gh_run_number = os.environ.get("BUILD_NUMBER", None)
 build_number = None if gh_run_number is None or gh_run_number == "" else gh_run_number
 
-version = '0.2.0'
+version = '0.2.1'
 
 setup(
     name='pytest-snowflake_bdd',
