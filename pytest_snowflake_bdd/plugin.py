@@ -125,7 +125,8 @@ def assert_table_contains(snowflake_sqlalchemy_conn, script_path, table):
     print("Executing query")
     print(sql)
 
-    actual_df = pd.read_sql(sql, snowflake_sqlalchemy_conn)
+    actual_df = _fetch_results(snowflake_sqlalchemy_conn, sql)
+
     expected_df, _ = table_to_df(table)
 
     print("\n\n\nEXPECTED schema")
@@ -134,6 +135,13 @@ def assert_table_contains(snowflake_sqlalchemy_conn, script_path, table):
     print(actual_df.dtypes)
 
     assert_frame_equal_with_sort(actual_df, expected_df, key_columns=list(actual_df))
+
+
+def _fetch_results(snowflake_sqlalchemy_conn, sql):
+    res = snowflake_sqlalchemy_conn.execute(sql)
+    columns = [line[0] for line in res.cursor.description]
+    actual_df = pd.DataFrame(res, columns=columns)
+    return actual_df
 
 
 @given('a snowflake connection')

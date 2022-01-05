@@ -71,7 +71,7 @@ def test_process_cells():
 def test_table_to_df():
     from pytest_snowflake_bdd import utils
     table = """| id: INTEGER | name: STRING   | active:BOOLEAN |
-               | 1           | "tilak"        | 1           |
+               | 1           | "tilak"        | True           |
     """
     actual_df, col_name_sqltype_pairs = utils.table_to_df(
         table)
@@ -86,7 +86,7 @@ def test_table_to_df():
     assert str(col_name_sqltype_pairs) == expected_col_name_to_sqltype_pairs
 
     table = """| id: INTEGER | name: STRING   | active:BOOLEAN   |
-               | 1           | "tilak"        | 1                |
+               | 1           | "tilak"        | true             |
                | 2           | "t"            | {null}           |
                | 3           | ""             | {null}           |
     """
@@ -216,7 +216,7 @@ def test_assert_table_contains(tmpdir):
     stubbed_df = pandas.DataFrame([[1, "tilak", True], [2, "t", None], [3, "", None]],
                                   columns=["id", "name", "active"])
 
-    with mock.patch('pytest_snowflake_bdd.plugin.pd.read_sql', return_value=stubbed_df) as read_sql_df:
+    with mock.patch('pytest_snowflake_bdd.plugin._fetch_results', return_value=stubbed_df) as read_sql_df:
         tmp_file = (tmpdir / "test.sql").__str__()
         f = open(tmp_file, "w")
         f.write("select 1")
@@ -225,7 +225,7 @@ def test_assert_table_contains(tmpdir):
         snowflake_sqlalchemy_conn = Mock()
 
         table = """| id: INTEGER     | name: STRING   | active:BOOLEAN   |
-                       | 1           | "tilak"        | 1                |
+                       | 1           | "tilak"        | true             |
                        | 2           | "t"            | {null}           |
                        | 3           | ""             | {null}           |
             """

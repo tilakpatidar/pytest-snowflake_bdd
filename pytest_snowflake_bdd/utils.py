@@ -23,7 +23,7 @@ def process_cells(col_name_sqltype_pairs, cells):
         else:
             value = cell
         if value is not None:
-            value = sql_type.python_type(value)
+            value = value.lower() == "true" if sql_type.python_type is bool else sql_type.python_type(value)
         yield value
 
 
