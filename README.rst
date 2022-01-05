@@ -57,11 +57,11 @@ Below example illustrates the usage of step definitions provided by the plugin.
 
      Scenario: example_scenario
        Given a snowflake connection
-       When a temporary called "SNOWFLAKE_LIQUIBASE.PUBLIC.DEPARTMENT" has
+       When a temporary table called "SNOWFLAKE_LIQUIBASE.PUBLIC.DEPARTMENT" has
          | dept_id: INTEGER | dept_name: STRING      |
          | 1                | "Computer Science"     |
          | 2                | "Software Engineering" |
-       When a temporary called "SNOWFLAKE_LIQUIBASE.PUBLIC.PEOPLE" has
+       When a temporary table called "SNOWFLAKE_LIQUIBASE.PUBLIC.PEOPLE" has
          | people_id: INTEGER | name: STRING | dept_id: INTEGER |
          | 10                 | "tilak"      | 1                |
        Then a sql script "./sql/example.sql" runs and the result is
@@ -97,7 +97,7 @@ Available Step definitions
 
 .. code:: gherkin
 
-    When a temporary called "SNOWFLAKE_LIQUIBASE.PUBLIC.DEPARTMENT" has
+    When a temporary table called "SNOWFLAKE_LIQUIBASE.PUBLIC.DEPARTMENT" has
      | dept_id: INTEGER | dept_name: STRING      |
      | 1                | "Computer Science"     |
      | 2                | "Software Engineering" |
@@ -109,7 +109,7 @@ Available Step definitions
 
 .. code:: gherkin
 
-    When a called "SNOWFLAKE_LIQUIBASE.PUBLIC.DEPARTMENT" has
+    When a table called "SNOWFLAKE_LIQUIBASE.PUBLIC.DEPARTMENT" has
      | dept_id: INTEGER | dept_name: STRING      |
      | 1                | "Computer Science"     |
      | 2                | "Software Engineering" |
@@ -149,11 +149,11 @@ These functions will be replaced in the sql query by statements like
        Given a snowflake connection
        And current timestamp "2022-01-05 04:12:17"
        And current time "04:12:17"
-       When a temporary called "SNOWFLAKE_LIQUIBASE.PUBLIC.DEPARTMENT" has
+       When a temporary table called "SNOWFLAKE_LIQUIBASE.PUBLIC.DEPARTMENT" has
          | dept_id: INTEGER | dept_name: STRING      |
          | 1                | "Computer Science"     |
          | 2                | "Software Engineering" |
-       When a temporary called "SNOWFLAKE_LIQUIBASE.PUBLIC.PEOPLE" has
+       When a temporary table called "SNOWFLAKE_LIQUIBASE.PUBLIC.PEOPLE" has
          | people_id: INTEGER | name: STRING | dept_id: INTEGER |
          | 10                 | "tilak"      | 1                |
        Then a sql script "./sql/example.sql" runs and the result is
